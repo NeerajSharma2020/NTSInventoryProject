@@ -1,0 +1,143 @@
+scalar Date
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Customer {
+    id: Int
+    companyName: [String]
+    addressLine1: String
+    addressLine2: String
+    city: String
+    state: String
+    zip: String
+}
+
+type CustomerNote {
+    id:Long
+    customerId: Long
+    createDate: DateTime
+    createdById: Long
+    text:String
+}
+
+input CustomerInput{
+companyName: [String]
+    addressLine1: String
+    addressLine2: String
+    city: String
+    state: String
+    zip: String
+}
+
+type Product{
+id:Int
+factoryID:Factory
+categoryID:ProductCategory
+subCategoryID:ProductSubCategory
+partNumber:String
+description:String
+formatTypeID:FormatType
+indUPC:String
+caseUPC:String
+ean:String
+alternateEAN:String
+uom:String
+statusID:Status
+basePrice:BigDecimal
+cost:BigDecimal
+priceById:PriceBy
+listPrice:Int
+minOrderQty:Int
+commisionRate:Float
+imageURL:String
+}
+
+type Factory{
+id:Int
+}
+type ProductCategory{
+id:Int
+title:String
+}
+
+type ProductSubCategory{
+id:Int
+title:String
+}
+
+type FormatType{
+id:Int
+title:String
+}
+
+type PriceBy{
+id:Int
+title:String
+}
+
+type Status{
+id:Int
+title:String
+}
+
+input ProductInput{
+factoryID:FactoryInput
+categoryID:ProductCategoryInput
+subCategoryID:ProductSubCategoryInput
+partNumber:String
+description:String
+formatTypeID:FormatTypeInput
+indUPC:String
+caseUPC:String
+ean:String
+alternateEAN:String
+uom:String
+statusID:StatusInput
+basePrice:BigDecimal
+cost:BigDecimal
+priceById:PriceByInput
+listPrice:Int
+minOrderQty:Int
+commisionRate:Float
+imageURL:String
+}
+
+input FactoryInput{
+
+}
+
+input ProductCategoryInput{
+title:String
+}
+
+input FormatTypeInput{
+title:String
+}
+
+input ProductSubCategoryInput{
+title:String
+}
+
+input PriceByInput{
+title:String
+}
+
+input StatusInput{
+title:String
+}
+
+
+type Query {
+   findProductById(id:Int):Product
+   findAllProducts:[Product]
+}
+
+type Mutation {
+    saveProduct(input:ProductInput):Product
+    deleteProductById(id:Int):String
+    updateProductById(id:Int,input:ProductInput):Product
+ }
+
+
