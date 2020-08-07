@@ -17,7 +17,6 @@ public class CustomerResolver implements GraphQLMutationResolver{
 	}
 
 	public Customer saveCustomer(Customer customer) {
-		System.out.println(customer.getCompanyName());
 		return customerRepo.save(customer);
 	}
 

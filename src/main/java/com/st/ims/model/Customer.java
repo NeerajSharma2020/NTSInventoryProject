@@ -1,8 +1,13 @@
 package com.st.ims.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.sql.Array;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * The persistent class for the "Customer" database table.
@@ -35,9 +40,6 @@ public class Customer implements Serializable {
 
 	@Column(name = "\"Zip\"", nullable = false, length = 1)
 	private String zip;
-
-	public Customer() {
-	}
 
 	public Integer getId() {
 		return this.id;

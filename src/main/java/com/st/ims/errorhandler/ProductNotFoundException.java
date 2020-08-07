@@ -19,13 +19,11 @@ public class ProductNotFoundException extends RuntimeException implements GraphQ
     
 	@Override
 	public List<SourceLocation> getLocations() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public ErrorType getErrorType() {
-		// TODO Auto-generated method stub
 		return ErrorType.DataFetchingException;
 	}
 	

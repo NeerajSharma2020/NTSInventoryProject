@@ -27,7 +27,6 @@ public class ProductQueryResolver implements GraphQLQueryResolver {
 		try {
 			return productRepo.findAll();	
 		} catch (Exception e) {
-			e.printStackTrace();
 			log.error(e);
 		}
 		return null;
@@ -44,7 +43,6 @@ public class ProductQueryResolver implements GraphQLQueryResolver {
 			return productRepo.findById(productID)
 					.orElseThrow(() -> new ProductNotFoundException("Product not found", productID));
 		} catch (Exception e) {
-			e.printStackTrace();
 			log.error(e);
 		}
 		return null;

@@ -18,20 +18,17 @@ public class GraphQLErrorAdapter implements GraphQLError{
 
 	@Override
 	public String getMessage() {
-		// TODO Auto-generated method stub
 		return (error instanceof ExceptionWhileDataFetching) 
                 ? ((ExceptionWhileDataFetching) error).getException().getMessage() : error.getMessage();
 	}
 
 	@Override
 	public List<SourceLocation> getLocations() {
-		// TODO Auto-generated method stub
 		return error.getLocations();
 	}
 
 	@Override
 	public ErrorType getErrorType() {
-		// TODO Auto-generated method stub
 		return (ErrorType)error.getErrorType();
 	}
 	

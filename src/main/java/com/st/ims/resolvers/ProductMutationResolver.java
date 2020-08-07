@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.st.ims.errorhandler.ProductNotFoundException;
 import com.st.ims.model.Product;
-import com.st.ims.model.ProductInput;
 import com.st.ims.repo.ProductRepository;
 
 import graphql.kickstart.tools.GraphQLMutationResolver;
@@ -48,7 +47,6 @@ public class ProductMutationResolver implements GraphQLMutationResolver{
 			productRepo.deleteById(productId);
 			return "Product deleted successfully.";
 		} catch (Exception e) {
-			e.printStackTrace();
 			log.error(e);
 			return "No Product entity with id "+productId+" exists!";
 		}
@@ -80,7 +78,7 @@ public class ProductMutationResolver implements GraphQLMutationResolver{
 			productToUpdate.getStatusID().setTitle(productData.getStatusID().getTitle());
 			productToUpdate.setBasePrice(productData.getBasePrice());
 			productToUpdate.setCost(productData.getCost());
-			productToUpdate.getPriceById().setTitle(productData.getPriceById().getTitle());;
+			productToUpdate.getPriceById().setTitle(productData.getPriceById().getTitle());
 			productToUpdate.setListPrice(productData.getListPrice());
 			productToUpdate.setMinOrderQty(productData.getMinOrderQty());
 			productToUpdate.setCommisionRate(productData.getCommisionRate());
@@ -88,7 +86,6 @@ public class ProductMutationResolver implements GraphQLMutationResolver{
 			return productRepo.save(productToUpdate);
 		} catch (Exception e) {
 			log.error(e);
-			e.printStackTrace();
 		}
 		return productToUpdate;
 		

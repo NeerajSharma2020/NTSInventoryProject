@@ -18,7 +18,6 @@ public class GraphQLAPIErrorHandler implements GraphQLErrorHandler{
 	
 	@Override
 	public List<GraphQLError> processErrors(List<GraphQLError> errors) {
-		// TODO Auto-generated method stub
 		List<GraphQLError> clientErrors = errors.stream()
                 .filter(this::isClientError)
                 .collect(Collectors.toList());
