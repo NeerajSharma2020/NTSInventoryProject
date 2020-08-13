@@ -28,24 +28,24 @@ public class Product implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name = "id", nullable = false)
-	private int id;
+	@Column(name = "\"productID\"", nullable = false)
+	private int productId;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="\"factoryID\"")
-	private Factory factoryID;
+	private Factory factory;
 	
 
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="\"categoryID\"")
-	private ProductCategory categoryID;
+	private ProductCategory category;
 	
 
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "\"subCategoryID\"")
-	private ProductSubCategory subCategoryID;
+	private ProductSubCategory subCategory;
 	
 	@Column(name = "\"partNumber\"" , nullable = false)
 	private String partNumber;
@@ -53,7 +53,7 @@ public class Product implements Serializable{
 	private String description;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="\"formatTypeID\"")
-	private FormatType formatTypeID;
+	private FormatType formatType;
 	@Column(name = "\"indUPC\"" , nullable = false)
 	private String indUPC;
 	@Column(name = "\"caseUPC\"" , nullable = false)
@@ -67,7 +67,7 @@ public class Product implements Serializable{
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="\"StatusID\"")
-	private Status statusID;
+	private Status status;
 	
 	@Column(name = "\"basePrice\"" , nullable = false)
 	private BigDecimal basePrice;
@@ -76,7 +76,7 @@ public class Product implements Serializable{
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="\"priceByID\"")
-	private PriceBy priceById;
+	private PriceBy priceBy;
 	
 	@Column(name = "\"listPrice\"" , nullable = false)
 	private int listPrice;
@@ -86,26 +86,26 @@ public class Product implements Serializable{
 	private double commisionRate;
 	@Column(name = "\"imageURL\"" , nullable = false)
 	private String imageURL;
-	public Product(Factory factoryID, ProductCategory categoryID, ProductSubCategory subCategoryID, String partNumber,
-			String description, FormatType formatTypeID, String indUPC, String caseUPC, String ean, String alternateEAN,
-			String uom, Status statusID, BigDecimal basePrice, BigDecimal cost, PriceBy priceById, int listPrice,
+	public Product(Factory factory, ProductCategory category, ProductSubCategory subCategory, String partNumber,
+			String description, FormatType formatType, String indUPC, String caseUPC, String ean, String alternateEAN,
+			String uom, Status status, BigDecimal basePrice, BigDecimal cost, PriceBy priceBy, int listPrice,
 			int minOrderQty, double commisionRate, String imageURL) {
 		super();
-		this.factoryID = factoryID;
-		this.categoryID = categoryID;
-		this.subCategoryID = subCategoryID;
+		this.factory = factory;
+		this.category = category;
+		this.subCategory = subCategory;
 		this.partNumber = partNumber;
 		this.description = description;
-		this.formatTypeID = formatTypeID;
+		this.formatType = formatType;
 		this.indUPC = indUPC;
 		this.caseUPC = caseUPC;
 		this.ean = ean;
 		this.alternateEAN = alternateEAN;
 		this.uom = uom;
-		this.statusID = statusID;
+		this.status = status;
 		this.basePrice = basePrice;
 		this.cost = cost;
-		this.priceById = priceById;
+		this.priceBy = priceBy;
 		this.listPrice = listPrice;
 		this.minOrderQty = minOrderQty;
 		this.commisionRate = commisionRate;

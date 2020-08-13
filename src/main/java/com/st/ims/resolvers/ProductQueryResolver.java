@@ -1,5 +1,6 @@
 package com.st.ims.resolvers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -24,12 +25,14 @@ public class ProductQueryResolver implements GraphQLQueryResolver {
 
 	public List<Product> findAllProducts() {
 		log.info("finding all products product...");
+		List<Product> productsList = new ArrayList<>();
 		try {
-			return productRepo.findAll();	
+			productsList=productRepo.findAll();	
+			return productsList;
 		} catch (Exception e) {
 			log.error(e);
 		}
-		return null;
+		return productsList;
 		
 	   }
 	
@@ -37,11 +40,11 @@ public class ProductQueryResolver implements GraphQLQueryResolver {
 	 * This method will take a Integer parameter i.e ProductId and will return that
 	 * product.
 	 */
-	public Product findProductById(int productID) {
-		log.info("finding product with id "+productID);
+	public Product findProductById(int productId) {
+		log.info("finding product with id "+productId);
 		try {
-			return productRepo.findById(productID)
-					.orElseThrow(() -> new ProductNotFoundException("Product not found", productID));
+			return productRepo.findById(productId)
+					.orElseThrow(() -> new ProductNotFoundException("Product not found", productId));
 		} catch (Exception e) {
 			log.error(e);
 		}

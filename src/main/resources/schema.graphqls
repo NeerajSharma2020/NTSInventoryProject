@@ -1,17 +1,7 @@
-scalar Date
+scalar LocalDateTime
 schema {
     query: Query
     mutation: Mutation
-}
-
-type Customer {
-    id: Int
-    companyName: [String]
-    addressLine1: String
-    addressLine2: String
-    city: String
-    state: String
-    zip: String
 }
 
 type CustomerNote {
@@ -32,22 +22,22 @@ companyName: [String]
 }
 
 type Product{
-id:Int
-factoryID:Factory
-categoryID:ProductCategory
-subCategoryID:ProductSubCategory
+productId:Int
+factory:Factory
+category:ProductCategory
+subCategory:ProductSubCategory
 partNumber:String
 description:String
-formatTypeID:FormatType
+formatType:FormatType
 indUPC:String
 caseUPC:String
 ean:String
 alternateEAN:String
 uom:String
-statusID:Status
+status:Status
 basePrice:BigDecimal
 cost:BigDecimal
-priceById:PriceBy
+priceBy:PriceBy
 listPrice:Int
 minOrderQty:Int
 commisionRate:Float
@@ -83,61 +73,127 @@ title:String
 }
 
 input ProductInput{
-factoryID:FactoryInput
-categoryID:ProductCategoryInput
-subCategoryID:ProductSubCategoryInput
+productId:Int
+factory:FactoryInput
+category:ProductCategoryInput!
+subCategory:ProductSubCategoryInput
 partNumber:String
 description:String
-formatTypeID:FormatTypeInput
+formatType:FormatTypeInput
 indUPC:String
 caseUPC:String
 ean:String
 alternateEAN:String
 uom:String
-statusID:StatusInput
+status:StatusInput
 basePrice:BigDecimal
 cost:BigDecimal
-priceById:PriceByInput
+priceBy:PriceByInput
 listPrice:Int
 minOrderQty:Int
-commisionRate:Float
+commissionRate:Float
 imageURL:String
 }
 
 input FactoryInput{
-
+id:Int
 }
-
 input ProductCategoryInput{
-title:String
-}
-
-input FormatTypeInput{
+id:Int
 title:String
 }
 
 input ProductSubCategoryInput{
+id:Int
+title:String
+}
+
+input FormatTypeInput{
+id:Int
 title:String
 }
 
 input PriceByInput{
+id:Int
 title:String
 }
 
 input StatusInput{
+id:Int
 title:String
 }
 
 
+type Invoice{
+    invoiceId:Int!
+    createDate: LocalDateTime
+    dueDate:LocalDateTime
+    invoiceNumber: String
+    status: String
+    factSONumber: String
+    proNumber: String
+    notes:String
+    invoiceAmount:Float
+    commissionPercentage:Float
+    commissionAmount:Float
+    invoiceDetails:[InvoiceDetails]
+}
+
+type InvoiceDetails{
+  invoiceDetailId:Int!
+  invoice:Invoice
+  product:Product
+}
+
+input InvoiceInput {
+    createDate: LocalDateTime!
+    status: String
+    factSONumber: String
+    proNumber: String
+    notes:String
+    invoiceAmount:Float!
+    commissionPercentage:Float!
+}
+
+input InvoiceDetailsInput{
+  invoice:InvoiceInput
+  product:ProductInput
+}
+
+input InvoiceUpdateInput{
+invoiceId:Int!
+createDate: LocalDateTime
+dueDate:LocalDateTime
+invoiceNumber: String
+status: String
+factSONumber: String
+proNumber: String
+notes:String
+invoiceAmount:Float
+commissionPercentage:Float
+commissionAmount:Float
+}
+
+input InvoiceDetailsUpdateInput{
+  invoiceDetailId:Int!
+  invoice:InvoiceUpdateInput
+  product:ProductInput
+}
+
 type Query {
    findProductById(id:Int):Product
    findAllProducts:[Product]
+   findAllInvoiceDetails:[InvoiceDetails]
+   findInvoiceDetailsById(InvoiceDetailsID:Int):InvoiceDetails
 }
 
 type Mutation {
     saveProduct(input:ProductInput):Product
     deleteProductById(id:Int):String
-    updateProductById(id:Int,input:ProductInput):Product
+    updateProductById(input:ProductInput):Product
+    saveInvoiceDetails(invoiceDetailsInput:InvoiceDetailsInput,productId:Int):InvoiceDetails
+    deleteInvoiceDetailById(invoiceDetailsId:Int):String
+    updateInvoiceDetails(invoiceDetail:InvoiceDetailsUpdateInput):InvoiceDetails
  }
 
 

@@ -8,6 +8,7 @@ import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
 
+@SuppressWarnings("serial")
 public class GraphQLErrorAdapter implements GraphQLError{
 
 	private GraphQLError error;

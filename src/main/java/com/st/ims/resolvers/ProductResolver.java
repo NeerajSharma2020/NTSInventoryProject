@@ -41,27 +41,27 @@ public class ProductResolver implements GraphQLResolver<Product>{
 	private StatusRepository statusRepo;
 	
 	public Factory getFactoryID(Product product) {
-		return factoryRepo.save(product.getFactoryID());
+		return factoryRepo.save(product.getFactory());
 	}
 	
 	public ProductCategory getCategoryID(Product product) {
-		return productCategoryRepo.save(product.getCategoryID());
+		return productCategoryRepo.save(product.getCategory());
 	}
 	
 	public ProductSubCategory getSubCategoryID(Product product) {
-		return productSubCategoryRepo.save(product.getSubCategoryID());
+		return productSubCategoryRepo.save(product.getSubCategory());
 	}
 	
 	public FormatType getFormatTypeID(Product product) {
-		return formattypeRepo.save(product.getFormatTypeID());
+		return formattypeRepo.save(product.getFormatType());
 	}
 	
 	public Status getStatusID(Product product) {
-		return statusRepo.save(product.getStatusID());
+		return statusRepo.save(product.getStatus());
 	}
 
 	public PriceBy getPriceByID(Product product) {
-		return priceRepo.save(product.getPriceById());
+		return priceRepo.save(product.getPriceBy());
 	}
 	
 }

@@ -31,9 +31,6 @@ public class CustomerNote implements Serializable{
 	@Column(name="\"Text\"", length=2147483647)
 	private String text;
 
-    public CustomerNote() {
-    }
-
 	public Long getId() {
 		return this.id;
 	}

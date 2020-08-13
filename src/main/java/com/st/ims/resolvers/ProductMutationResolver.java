@@ -1,12 +1,13 @@
 package com.st.ims.resolvers;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.st.ims.errorhandler.ProductNotFoundException;
 import com.st.ims.model.Product;
 import com.st.ims.repo.ProductRepository;
 
@@ -19,6 +20,9 @@ public class ProductMutationResolver implements GraphQLMutationResolver{
 	private final Logger log = Logger.getLogger(this.getClass());
 	@Autowired
 	ProductRepository productRepo;
+	
+	@PersistenceContext
+	private EntityManager entityManager;
 	
 	/*
 	 * This method will accept an Product Object and will save that object into
@@ -48,6 +52,7 @@ public class ProductMutationResolver implements GraphQLMutationResolver{
 			return "Product deleted successfully.";
 		} catch (Exception e) {
 			log.error(e);
+			e.printStackTrace();
 			return "No Product entity with id "+productId+" exists!";
 		}
 		
@@ -56,38 +61,26 @@ public class ProductMutationResolver implements GraphQLMutationResolver{
 	}
 
 	/*
-	 * This method will take two parameters, first productID as integer and other
+	 * This method will take two parameters, first productId as integer and other
 	 * Product object.
 	 * This will find product with passed id and update that according to passed object.
 	 */
-	public Product updateProductById(int productID,Product productData) {
-		Product productToUpdate = productRepo.findById(productID)
-				 .orElseThrow(() -> new ProductNotFoundException("No product found for this ProductID.", productID));
-		log.info("Product to be updated "+productToUpdate);
+	public Product updateProductById(Product productData) {
+		
 		try {
-			productToUpdate.getCategoryID().setTitle(productData.getCategoryID().getTitle());
-			productToUpdate.getSubCategoryID().setTitle(productData.getSubCategoryID().getTitle());
-			productToUpdate.setPartNumber(productData.getPartNumber());
-			productToUpdate.setDescription(productData.getDescription());
-			productToUpdate.getFormatTypeID().setTitle(productData.getFormatTypeID().getTitle());
-			productToUpdate.setIndUPC(productData.getIndUPC());
-			productToUpdate.setCaseUPC(productData.getCaseUPC());
-			productToUpdate.setEan(productData.getEan());
-			productToUpdate.setAlternateEAN(productData.getAlternateEAN());
-			productToUpdate.setUom(productData.getUom());
-			productToUpdate.getStatusID().setTitle(productData.getStatusID().getTitle());
-			productToUpdate.setBasePrice(productData.getBasePrice());
-			productToUpdate.setCost(productData.getCost());
-			productToUpdate.getPriceById().setTitle(productData.getPriceById().getTitle());
-			productToUpdate.setListPrice(productData.getListPrice());
-			productToUpdate.setMinOrderQty(productData.getMinOrderQty());
-			productToUpdate.setCommisionRate(productData.getCommisionRate());
-			productToUpdate.setImageURL(productData.getImageURL());
-			return productRepo.save(productToUpdate);
+			entityManager.merge(productData.getFactory());
+            entityManager.merge(productData.getCategory());
+            entityManager.merge(productData.getSubCategory());
+            entityManager.merge(productData.getFormatType());
+            entityManager.merge(productData.getPriceBy());
+            entityManager.merge(productData.getStatus());
+			return entityManager.merge(productData);
 		} catch (Exception e) {
 			log.error(e);
+			e.printStackTrace();
 		}
-		return productToUpdate;
+		return productData;
+	
 		
 		
 	}
