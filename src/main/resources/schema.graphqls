@@ -181,18 +181,18 @@ input InvoiceDetailsUpdateInput{
 }
 
 type Query {
-   findProductById(id:Int):Product
+   findProductById(id:Int!):Product
    findAllProducts:[Product]
    findAllInvoiceDetails:[InvoiceDetails]
-   findInvoiceDetailsById(InvoiceDetailsID:Int):InvoiceDetails
+   findInvoiceDetailsById(InvoiceDetailsID:Int!):InvoiceDetails
 }
 
 type Mutation {
     saveProduct(input:ProductInput):Product
-    deleteProductById(id:Int):String
+    deleteProductById(id:Int!):String
     updateProductById(input:ProductInput):Product
-    saveInvoiceDetails(invoiceDetailsInput:InvoiceDetailsInput,productId:Int):InvoiceDetails
-    deleteInvoiceDetailById(invoiceDetailsId:Int):String
+    saveInvoiceDetails(invoiceDetailsInput:InvoiceDetailsInput,productId:Int!):InvoiceDetails
+    deleteInvoiceDetailById(invoiceDetailsId:Int!):String
     updateInvoiceDetails(invoiceDetail:InvoiceDetailsUpdateInput):InvoiceDetails
  }
 

@@ -83,13 +83,13 @@ public class Product implements Serializable{
 	@Column(name = "\"minOrderQty\"" , nullable = false)
 	private int minOrderQty;
 	@Column(name = "\"commisionRate\"" , nullable = false)
-	private double commisionRate;
+	private double commissionRate;
 	@Column(name = "\"imageURL\"" , nullable = false)
 	private String imageURL;
 	public Product(Factory factory, ProductCategory category, ProductSubCategory subCategory, String partNumber,
 			String description, FormatType formatType, String indUPC, String caseUPC, String ean, String alternateEAN,
 			String uom, Status status, BigDecimal basePrice, BigDecimal cost, PriceBy priceBy, int listPrice,
-			int minOrderQty, double commisionRate, String imageURL) {
+			int minOrderQty, double commissionRate, String imageURL) {
 		super();
 		this.factory = factory;
 		this.category = category;
@@ -108,7 +108,7 @@ public class Product implements Serializable{
 		this.priceBy = priceBy;
 		this.listPrice = listPrice;
 		this.minOrderQty = minOrderQty;
-		this.commisionRate = commisionRate;
+		this.commissionRate = commissionRate;
 		this.imageURL = imageURL;
 	}
 	
