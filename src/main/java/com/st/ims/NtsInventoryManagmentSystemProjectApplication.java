@@ -9,5 +9,4 @@ public class NtsInventoryManagmentSystemProjectApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NtsInventoryManagmentSystemProjectApplication.class, args);
 	}
-
 }
