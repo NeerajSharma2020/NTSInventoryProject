@@ -30,8 +30,7 @@ public class InvoiceDetailsQueryResolver implements GraphQLQueryResolver{
 			invoiceDetailsList= invoiceDetailsRepo.findAll();
 			return invoiceDetailsList;
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("Exception while fetching all Invoice Details.",e);
 		}
 		return invoiceDetailsList;
 	}
@@ -41,8 +40,7 @@ public class InvoiceDetailsQueryResolver implements GraphQLQueryResolver{
     	try {
     		return  invoiceDetailsRepo.findById(invoiceDetailsId).orElse(null);
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("Exception while fetching Invoice Details by id, may be id you are looking for not available.",e);
 		}
 		return null;
      }

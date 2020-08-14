@@ -40,7 +40,7 @@ cost:BigDecimal
 priceBy:PriceBy
 listPrice:Int
 minOrderQty:Int
-commisionRate:Float
+commissionRate:Float
 imageURL:String
 }
 

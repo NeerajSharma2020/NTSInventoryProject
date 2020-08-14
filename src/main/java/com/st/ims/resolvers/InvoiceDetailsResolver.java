@@ -28,8 +28,7 @@ public class InvoiceDetailsResolver implements GraphQLResolver<InvoiceDetails> {
 			
 			return invoiceRepo.save(invoiceDetails.getInvoice());
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("Exception while saving Invoice for Invoice Details.",e);
 		}
 		return null;
 
@@ -39,8 +38,7 @@ public class InvoiceDetailsResolver implements GraphQLResolver<InvoiceDetails> {
 		try {
 			return productRepo.save(invoiceDetails.getProduct());
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("Exception while saving Product for Invoice Details.",e);
 		}
 		return null;
 

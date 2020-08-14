@@ -40,8 +40,7 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 			filledInvoiceDetails.setProduct(productRepo.findById(productId).orElse(null));
 			return invoiceDetailsRepo.save(filledInvoiceDetails);
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
+			logger.error("Exception while saving Invoide Details.",e);
 		}
 		return invoiceDetail;
 	}
@@ -52,8 +51,7 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 			invoiceDetailsRepo.deleteById(ivoiceDetailsId);
 			return "Invoice Deleted successfully.";
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
+			logger.error("Exception while deleting Invoice Details.",e);
 			return "No InvoiceDetail entity with id " + ivoiceDetailsId + " exists!";
 		}
 
@@ -65,8 +63,7 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 			entityManager.merge(invoiceDetail.getInvoice());
 			return entityManager.merge(invoiceDetail);
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("Exception while updaing Invoice Details.",e);
 		}
 		return invoiceDetail;
 	}

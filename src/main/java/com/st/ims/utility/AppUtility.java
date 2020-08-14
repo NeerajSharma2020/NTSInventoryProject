@@ -5,6 +5,7 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.st.ims.model.Invoice;
@@ -12,6 +13,8 @@ import com.st.ims.model.InvoiceDetails;
 
 @Service
 public class AppUtility {
+	
+	private static final Logger logger = Logger.getLogger(AppUtility.class);
 	
 	private AppUtility() {
 		
@@ -65,7 +68,7 @@ public class AppUtility {
 			invoiceDetail.setInvoice(invoice);
 			return invoiceDetail;
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			logger.error("Exception while configuring dueDate,invoiceNumber and commissionAmount.",e);
 		}
 		return invoiceDetail;
 		

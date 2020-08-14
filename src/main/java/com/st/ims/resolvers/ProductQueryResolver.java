@@ -24,13 +24,13 @@ public class ProductQueryResolver implements GraphQLQueryResolver {
 	/* This method will return the list of products. */
 
 	public List<Product> findAllProducts() {
-		log.info("finding all products product...");
 		List<Product> productsList = new ArrayList<>();
 		try {
-			productsList=productRepo.findAll();	
+			productsList=productRepo.findAll();
+			log.info("Size of all products List.."+productsList.size());
 			return productsList;
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Exception while fetching all Products."+e);
 		}
 		return productsList;
 		
@@ -46,7 +46,7 @@ public class ProductQueryResolver implements GraphQLQueryResolver {
 			return productRepo.findById(productId)
 					.orElseThrow(() -> new ProductNotFoundException("Product not found", productId));
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Exception while fetching Prodcut by Id."+e);
 		}
 		return null;
 		
