@@ -50,13 +50,13 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 	}
 
 	/* This method will delete invoice details by Id */
-	public String deleteInvoiceDetailById(int ivoiceDetailsId) {
+	public boolean deleteInvoiceDetailById(int ivoiceDetailsId) {
 		try {
 			invoiceDetailsRepo.deleteById(ivoiceDetailsId);
-			return "Invoice Deleted successfully.";
+			return true;
 		} catch (Exception e) {
 			logger.error("Exception while deleting Invoice Details.",e);
-			return "No InvoiceDetail entity with id " + ivoiceDetailsId + " exists!";
+			return false;
 		}
 
 	}
