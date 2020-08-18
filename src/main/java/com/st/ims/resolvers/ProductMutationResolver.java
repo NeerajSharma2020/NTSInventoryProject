@@ -44,13 +44,13 @@ public class ProductMutationResolver implements GraphQLMutationResolver{
 	 * This method will take productID as integer and will delete that product from
 	 * database.
 	 */
-	public String deleteProductById(int productId) {
+	public boolean deleteProductById(int productId) {
 		try {
 			productRepo.deleteById(productId);
-			return "Product deleted successfully.";
+			return true;
 		} catch (Exception e) {
 			log.error("Exception while deleting Product.",e);
-			return "No Product entity with id "+productId+" exists!";
+			return false;
 		}
 		
 		

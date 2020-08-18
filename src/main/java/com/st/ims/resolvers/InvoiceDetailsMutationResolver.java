@@ -38,6 +38,10 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 		try {
 			InvoiceDetails filledInvoiceDetails = AppUtility.setDefaultValues(invoiceDetail);
 			filledInvoiceDetails.setProduct(productRepo.findById(productId).orElse(null));
+			logger.info("initial invoice Id....."+invoiceDetail.getInvoice().getInvoiceId());
+			if(invoiceDetail.getInvoice().getInvoiceId() == 0) {
+				entityManager.persist(invoiceDetail.getInvoice());
+			}
 			return invoiceDetailsRepo.save(filledInvoiceDetails);
 		} catch (Exception e) {
 			logger.error("Exception while saving Invoide Details.",e);

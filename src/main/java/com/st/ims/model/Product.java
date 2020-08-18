@@ -86,32 +86,6 @@ public class Product implements Serializable{
 	private double commissionRate;
 	@Column(name = "\"imageURL\"" , nullable = false)
 	private String imageURL;
-	public Product(Factory factory, ProductCategory category, ProductSubCategory subCategory, String partNumber,
-			String description, FormatType formatType, String indUPC, String caseUPC, String ean, String alternateEAN,
-			String uom, Status status, BigDecimal basePrice, BigDecimal cost, PriceBy priceBy, int listPrice,
-			int minOrderQty, double commissionRate, String imageURL) {
-		super();
-		this.factory = factory;
-		this.category = category;
-		this.subCategory = subCategory;
-		this.partNumber = partNumber;
-		this.description = description;
-		this.formatType = formatType;
-		this.indUPC = indUPC;
-		this.caseUPC = caseUPC;
-		this.ean = ean;
-		this.alternateEAN = alternateEAN;
-		this.uom = uom;
-		this.status = status;
-		this.basePrice = basePrice;
-		this.cost = cost;
-		this.priceBy = priceBy;
-		this.listPrice = listPrice;
-		this.minOrderQty = minOrderQty;
-		this.commissionRate = commissionRate;
-		this.imageURL = imageURL;
-	}
-	
 	
 		
 

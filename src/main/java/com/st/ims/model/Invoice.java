@@ -58,28 +58,4 @@ public class Invoice implements Serializable{
             cascade = CascadeType.ALL)
 	private List<InvoiceDetails> invoiceDetails;
 	
-	
-	public Invoice(LocalDateTime createDate, LocalDateTime dueDate, String invoiceNumber, String status, String factSONumber,
-			String proNumber, String notes, double invoiceAmount, double commissionPercentage, double commissionAmount,
-			List<InvoiceDetails> invoiceDetails) {
-		super();
-		this.createDate = createDate;
-		this.dueDate = dueDate;
-		this.invoiceNumber = invoiceNumber;
-		this.status = status;
-		this.factSONumber = factSONumber;
-		this.proNumber = proNumber;
-		this.notes = notes;
-		this.invoiceAmount = invoiceAmount;
-		this.commissionPercentage = commissionPercentage;
-		this.commissionAmount = commissionAmount;
-		this.invoiceDetails = invoiceDetails;
-	}
-	
-	
-	
-	
-	
-
-
 }

@@ -1,0 +1,124 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+
+type Product{
+productId:Int
+factory:Factory
+category:ProductCategory
+subCategory:ProductSubCategory
+partNumber:String
+description:String
+formatType:FormatType
+indUPC:String
+caseUPC:String
+ean:String
+alternateEAN:String
+uom:String
+status:Status
+basePrice:BigDecimal
+cost:BigDecimal
+priceBy:PriceBy
+listPrice:Int
+minOrderQty:Int
+commissionRate:Float
+imageURL:String
+}
+
+type Factory{
+id:Int
+}
+type ProductCategory{
+id:Int
+title:String
+}
+
+type ProductSubCategory{
+id:Int
+title:String
+}
+
+type FormatType{
+id:Int
+title:String
+}
+
+type PriceBy{
+id:Int
+title:String
+}
+
+type Status{
+id:Int
+title:String
+}
+
+input ProductInput{
+productId:Int
+factory:FactoryInput
+category:ProductCategoryInput!
+subCategory:ProductSubCategoryInput
+partNumber:String
+description:String
+formatType:FormatTypeInput
+indUPC:String
+caseUPC:String
+ean:String
+alternateEAN:String
+uom:String
+status:StatusInput
+basePrice:BigDecimal
+cost:BigDecimal
+priceBy:PriceByInput
+listPrice:Int
+minOrderQty:Int
+commissionRate:Float
+imageURL:String
+}
+
+input FactoryInput{
+id:Int
+}
+input ProductCategoryInput{
+id:Int
+title:String
+}
+
+input ProductSubCategoryInput{
+id:Int
+title:String
+}
+
+input FormatTypeInput{
+id:Int
+title:String
+}
+
+input PriceByInput{
+id:Int
+title:String
+}
+
+input StatusInput{
+id:Int
+title:String
+}
+
+
+type Query {
+   findProductById(id:Int!):Product
+   findAllProducts:[Product]
+   
+}
+
+type Mutation {
+    saveProduct(input:ProductInput):Product
+    deleteProductById(id:Int!):Boolean
+    updateProductById(input:ProductInput):Product
+    
+ }
+
+
+

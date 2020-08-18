@@ -6,7 +6,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.ApplicationScope;
 
+import com.st.ims.AppConfig;
 import com.st.ims.errorhandler.ProductNotFoundException;
 import com.st.ims.model.Product;
 import com.st.ims.repo.ProductRepository;
@@ -20,12 +22,14 @@ public class ProductQueryResolver implements GraphQLQueryResolver {
 	@Autowired
 	private ProductRepository productRepo;
 	
-	
+	@Autowired
+	private AppConfig appconfig;
 	/* This method will return the list of products. */
 
 	public List<Product> findAllProducts() {
 		List<Product> productsList = new ArrayList<>();
 		try {
+			System.out.println(appconfig.getDataSourceUsername());
 			productsList=productRepo.findAll();
 			log.info("Size of all products List.."+productsList.size());
 			return productsList;
