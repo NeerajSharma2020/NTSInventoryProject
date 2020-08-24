@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.st.ims.model.InvoiceDetails;
 import com.st.ims.repo.InvoiceDetailsRepository;
+import com.st.ims.repo.InvoiceRepository;
 import com.st.ims.repo.ProductRepository;
 import com.st.ims.utility.AppUtility;
 
@@ -29,6 +30,9 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 
 	@PersistenceContext
 	private EntityManager entityManager;
+	
+	@Autowired
+	private InvoiceRepository invoiceRepo;
 
 	/*
 	 * This method will take invoice details and productId and will persist invoice
@@ -40,7 +44,7 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 			filledInvoiceDetails.setProduct(productRepo.findById(productId).orElse(null));
 			logger.info("initial invoice Id....."+invoiceDetail.getInvoice().getInvoiceId());
 			if(invoiceDetail.getInvoice().getInvoiceId() == 0) {
-				entityManager.persist(invoiceDetail.getInvoice());
+				invoiceRepo.save(invoiceDetail.getInvoice());
 			}
 			return invoiceDetailsRepo.save(filledInvoiceDetails);
 		} catch (Exception e) {
@@ -50,9 +54,9 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 	}
 
 	/* This method will delete invoice details by Id */
-	public boolean deleteInvoiceDetailById(int ivoiceDetailsId) {
+	public boolean deleteInvoiceDetailById(int invoiceDetailsId) {
 		try {
-			invoiceDetailsRepo.deleteById(ivoiceDetailsId);
+			invoiceDetailsRepo.deleteById(invoiceDetailsId);
 			return true;
 		} catch (Exception e) {
 			logger.error("Exception while deleting Invoice Details.",e);
@@ -64,9 +68,13 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 	/* This method will take InvoiceDetails Object and return new updated Object. */
 	public InvoiceDetails updateInvoiceDetails(InvoiceDetails invoiceDetail) {
 		try {
-			entityManager.merge(invoiceDetail.getInvoice());
-			return entityManager.merge(invoiceDetail);
-		} catch (Exception e) {
+			if(invoiceDetailsRepo.existsById(invoiceDetail.getInvoiceDetailId())) {
+				entityManager.merge(invoiceDetail.getInvoice());
+				return entityManager.merge(invoiceDetail);	
+			}else {
+				logger.error("Exception while updaing Invoice Details, May be InvocieDetailsId you are looking for doesn't exists.");
+			}
+			} catch (Exception e) {
 			logger.error("Exception while updaing Invoice Details.",e);
 		}
 		return invoiceDetail;

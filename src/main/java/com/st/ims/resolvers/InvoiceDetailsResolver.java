@@ -1,7 +1,5 @@
 package com.st.ims.resolvers;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
@@ -27,9 +25,6 @@ public class InvoiceDetailsResolver implements GraphQLResolver<InvoiceDetails> {
 
 	@Autowired
 	private ProductRepository productRepo;
-	
-	@PersistenceContext
-	private EntityManager entityManager;
 
 	public Invoice getInvoice(InvoiceDetails invoiceDetails) {
 		try {

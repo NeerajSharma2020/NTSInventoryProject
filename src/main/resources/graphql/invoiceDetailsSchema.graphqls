@@ -57,6 +57,7 @@ input InvoiceDetailsUpdateInput{
   invoiceDetailId:Int!
   invoice:InvoiceUpdateInput
   product:ProductInput
+  productCount:Int
 }
 
 extend type Query {

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.st.ims.model.Invoice;
 import com.st.ims.model.InvoiceDetails;
+import com.st.ims.model.Order;
+import com.st.ims.model.OrderDetails;
 
 @Service
 public class AppUtility {
@@ -71,6 +73,22 @@ public class AppUtility {
 			logger.error("Exception while configuring dueDate,invoiceNumber and commissionAmount.",e);
 		}
 		return invoiceDetail;
+		
+		
+	}
+	
+	public static OrderDetails setDefaultValues(OrderDetails orderDetail) {
+		try {
+			 Order order = orderDetail.getOrder();
+			 order.setDueDate(getDueDate(order.getCreateDate()));
+			 order.setCommissionAmount(getCommissionAmount(order.getInvoiceAmount(),order.getCommissionPercentage()));
+			 order.setInvoiceNumber(getInvoiceNumber());
+			 orderDetail.setOrder(order);
+			return orderDetail;
+		} catch (NoSuchAlgorithmException e) {
+			logger.error("Exception while configuring dueDate,invoiceNumber and commissionAmount.",e);
+		}
+		return orderDetail;
 		
 		
 	}
