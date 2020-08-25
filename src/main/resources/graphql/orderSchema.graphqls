@@ -1,0 +1,77 @@
+scalar LocalDateTime
+
+type Order{
+    orderId:Int!
+    createDate: LocalDateTime
+    dueDate:LocalDateTime
+    orderNumber: String
+    status: String
+    factSONumber: String
+    proNumber: String
+    notes:String
+    orderAmount:Float
+    commissionPercentage:Float
+    commissionAmount:Float
+    orderDetails:[OrderDetails]
+}
+
+type OrderDetails{
+  orderDetailId:Int!
+  order:Order
+  product:Product
+  productCount:Int
+}
+
+input OrderInput {
+    orderId:Int
+    createDate: LocalDateTime!
+    status: String
+    factSONumber: String
+    proNumber: String
+    notes:String
+    orderAmount:Float!
+    commissionPercentage:Float!
+}
+
+input OrderDetailsInput{
+  order:OrderInput
+  product:ProductInput
+  productCount:Int
+}
+
+input OrderUpdateInput{
+orderId:Int!
+createDate: LocalDateTime
+dueDate:LocalDateTime
+orderNumber: String
+status: String
+factSONumber: String
+proNumber: String
+notes:String
+orderAmount:Float
+commissionPercentage:Float
+commissionAmount:Float
+}
+
+input OrderDetailsUpdateInput{
+  orderDetailId:Int!
+  order:OrderUpdateInput
+  product:ProductInput
+  productCount:Int
+}
+
+extend type Query{
+findAllOrderDetails:[OrderDetails]
+findOrderDetailById(orderDetailId:Int!):OrderDetails
+}
+extend type Mutation {
+    saveOrderDetails(orderDetailsInput:OrderDetailsInput,productId:Int!):OrderDetails
+    deleteOrderDetailById(orderDetailId:Int!):Boolean
+    updateOrderDetails(orderDetail:OrderDetailsUpdateInput):OrderDetails
+    
+ }
+
+
+
+
+

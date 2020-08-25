@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.st.ims.model.Invoice;
 import com.st.ims.model.InvoiceDetails;
+import com.st.ims.model.Order;
+import com.st.ims.model.OrderDetails;
 
 @Service
 public class AppUtility {
@@ -32,7 +34,7 @@ public class AppUtility {
 		
 	}
 
-	/* This method will return alphanumeric invoice number. */
+	/* This method will return alphanumeric order number. */
 	
 	private static String getInvoiceNumber() throws NoSuchAlgorithmException {
 		Random rand;
@@ -51,7 +53,7 @@ public class AppUtility {
 	}
 	
 	/*
-	 * This method will take invoice amount and commission percentage and will return
+	 * This method will take order amount and commission percentage and will return
 	 * commission amount.
 	 */
 	private static double getCommissionAmount(double invoiceAmount , double commissionPercentage) {
@@ -71,6 +73,22 @@ public class AppUtility {
 			logger.error("Exception while configuring dueDate,invoiceNumber and commissionAmount.",e);
 		}
 		return invoiceDetail;
+		
+		
+	}
+	
+	public static OrderDetails setDefaultValues(OrderDetails orderDetail) {
+		try {
+			Order order = orderDetail.getOrder();
+			order.setDueDate(getDueDate(order.getCreateDate()));
+			order.setCommissionAmount(getCommissionAmount(order.getOrderAmount(),order.getCommissionPercentage()));
+			order.setOrderNumber(getInvoiceNumber());
+			orderDetail.setOrder(order);
+			return orderDetail;
+		} catch (NoSuchAlgorithmException e) {
+			logger.error("Exception while configuring dueDate,orderNumber and commissionAmount.",e);
+		}
+		return orderDetail;
 		
 		
 	}
