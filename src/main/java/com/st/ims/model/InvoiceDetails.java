@@ -38,7 +38,7 @@ public class InvoiceDetails implements Serializable{
 	private Invoice invoice;
 	
 	// CascadeType.PERSIST will restrict to delete the product record while deleting InvoiceDetails.
-	  @OneToOne(cascade = CascadeType.PERSIST)
+	  @OneToOne(cascade = CascadeType.MERGE)
 	  @JoinColumn(name="\"productID\"")
 	 private Product product;
 	 

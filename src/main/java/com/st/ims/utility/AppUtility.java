@@ -3,6 +3,8 @@ package com.st.ims.utility;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
@@ -10,8 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.st.ims.model.Invoice;
 import com.st.ims.model.InvoiceDetails;
-import com.st.ims.model.Order;
-import com.st.ims.model.OrderDetails;
+import com.st.ims.model.InvoiceProducts;
 
 @Service
 public class AppUtility {
@@ -73,23 +74,28 @@ public class AppUtility {
 			logger.error("Exception while configuring dueDate,invoiceNumber and commissionAmount.",e);
 		}
 		return invoiceDetail;
-		
-		
 	}
 	
-	public static OrderDetails setDefaultValues(OrderDetails orderDetail) {
+	public static List<InvoiceDetails> getInvoiceDetailsList(InvoiceDetails invoiceDetail, List<InvoiceProducts> invoiceProductList){
+		List<InvoiceDetails> invoiceDetailsList = new ArrayList<>();
 		try {
-			 Order order = orderDetail.getOrder();
-			 order.setDueDate(getDueDate(order.getCreateDate()));
-			 order.setCommissionAmount(getCommissionAmount(order.getInvoiceAmount(),order.getCommissionPercentage()));
-			 order.setInvoiceNumber(getInvoiceNumber());
-			 orderDetail.setOrder(order);
-			return orderDetail;
-		} catch (NoSuchAlgorithmException e) {
-			logger.error("Exception while configuring dueDate,invoiceNumber and commissionAmount.",e);
+			InvoiceDetails filledInvoiceDetails = setDefaultValues(invoiceDetail);
+			if(!invoiceProductList.isEmpty()) {
+				for(InvoiceProducts productListIterator:invoiceProductList){
+					InvoiceDetails newInvoiceDetail = new InvoiceDetails();
+					newInvoiceDetail.setInvoice(filledInvoiceDetails.getInvoice());
+					newInvoiceDetail.setProduct(productListIterator.getProduct());
+					newInvoiceDetail.setProductCount(productListIterator.getProductQuantity());
+					invoiceDetailsList.add(newInvoiceDetail);
+				}
+			}else {
+				logger.error("Invoice doesn,t have any product associated with it.");
+			}
+			    return invoiceDetailsList;
+		} catch (Exception e) {
+			logger.error("Exception while getting InvoiceDetailsList.",e);
 		}
-		return orderDetail;
-		
-		
+		return invoiceDetailsList;
 	}
+	
 }

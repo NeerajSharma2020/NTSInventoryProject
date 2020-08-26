@@ -1,5 +1,7 @@
 package com.st.ims.resolvers;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -9,9 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.st.ims.model.InvoiceDetails;
+import com.st.ims.model.InvoiceProducts;
 import com.st.ims.repo.InvoiceDetailsRepository;
-import com.st.ims.repo.InvoiceRepository;
-import com.st.ims.repo.ProductRepository;
 import com.st.ims.utility.AppUtility;
 
 import graphql.kickstart.tools.GraphQLMutationResolver;
@@ -25,38 +26,32 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 	@Autowired
 	private InvoiceDetailsRepository invoiceDetailsRepo;
 
-	@Autowired
-	private ProductRepository productRepo;
-
 	@PersistenceContext
 	private EntityManager entityManager;
-	
-	@Autowired
-	private InvoiceRepository invoiceRepo;
 
 	/*
 	 * This method will take invoice details and productId and will persist invoice
-	 * in database and will make relationship of product with invoicedetails.
+	 * in database and will make relationship of product with InvoiceDetails.
 	 */
-	public InvoiceDetails saveInvoiceDetails(InvoiceDetails invoiceDetail, int productId) {
+	public List<InvoiceDetails> saveInvoiceDetails(InvoiceDetails invoiceDetail, List<InvoiceProducts> invoiceProductList) {
+		
+		List<InvoiceDetails> invoiceDetailsList = null;
 		try {
-			InvoiceDetails filledInvoiceDetails = AppUtility.setDefaultValues(invoiceDetail);
-			filledInvoiceDetails.setProduct(productRepo.findById(productId).orElse(null));
-			logger.info("initial invoice Id....."+invoiceDetail.getInvoice().getInvoiceId());
-			if(invoiceDetail.getInvoice().getInvoiceId() == 0) {
-				invoiceRepo.save(invoiceDetail.getInvoice());
-			}
-			return invoiceDetailsRepo.save(filledInvoiceDetails);
-		} catch (Exception e) {
+			invoiceDetailsList=AppUtility.getInvoiceDetailsList(invoiceDetail, invoiceProductList);
+             if(invoiceDetail.getInvoice() != null) {
+            	 entityManager.persist(invoiceDetail.getInvoice());
+             }
+			    return invoiceDetailsRepo.saveAll(invoiceDetailsList);
+	} catch (Exception e) {
 			logger.error("Exception while saving Invoide Details.",e);
 		}
-		return invoiceDetail;
+		return invoiceDetailsList;
 	}
 
 	/* This method will delete invoice details by Id */
-	public boolean deleteInvoiceDetailById(int invoiceDetailsId) {
+	public boolean deleteInvoiceDetailById(int ivoiceDetailsId) {
 		try {
-			invoiceDetailsRepo.deleteById(invoiceDetailsId);
+			invoiceDetailsRepo.deleteById(ivoiceDetailsId);
 			return true;
 		} catch (Exception e) {
 			logger.error("Exception while deleting Invoice Details.",e);
@@ -68,13 +63,9 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 	/* This method will take InvoiceDetails Object and return new updated Object. */
 	public InvoiceDetails updateInvoiceDetails(InvoiceDetails invoiceDetail) {
 		try {
-			if(invoiceDetailsRepo.existsById(invoiceDetail.getInvoiceDetailId())) {
-				entityManager.merge(invoiceDetail.getInvoice());
-				return entityManager.merge(invoiceDetail);	
-			}else {
-				logger.error("Exception while updaing Invoice Details, May be InvocieDetailsId you are looking for doesn't exists.");
-			}
-			} catch (Exception e) {
+			entityManager.merge(invoiceDetail.getInvoice());
+			return entityManager.merge(invoiceDetail);
+		} catch (Exception e) {
 			logger.error("Exception while updaing Invoice Details.",e);
 		}
 		return invoiceDetail;

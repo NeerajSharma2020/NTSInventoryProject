@@ -60,13 +60,19 @@ input InvoiceDetailsUpdateInput{
   productCount:Int
 }
 
+input invoiceProducts{
+product:ProductInput
+productQuantity:Int
+totalAmount:Float
+}
+
 extend type Query {
    findAllInvoiceDetails:[InvoiceDetails]
    findInvoiceDetailsById(InvoiceDetailsID:Int!):InvoiceDetails
 }
 
 extend type Mutation {
-    saveInvoiceDetails(invoiceDetailsInput:InvoiceDetailsInput,productId:Int!):InvoiceDetails
+    saveInvoiceDetails(invoiceDetailsInput:InvoiceDetailsInput,productList:[invoiceProducts]):[InvoiceDetails]
     deleteInvoiceDetailById(invoiceDetailsId:Int!):String
     updateInvoiceDetails(invoiceDetail:InvoiceDetailsUpdateInput):InvoiceDetails
  }
