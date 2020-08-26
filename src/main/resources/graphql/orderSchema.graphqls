@@ -39,6 +39,11 @@ input OrderDetailsInput{
   productCount:Int
 }
 
+input OrderProducts{
+product:ProductInput
+productQuantity:Int
+}
+
 input OrderUpdateInput{
 orderId:Int!
 createDate: LocalDateTime
@@ -65,7 +70,7 @@ findAllOrderDetails:[OrderDetails]
 findOrderDetailById(orderDetailId:Int!):OrderDetails
 }
 extend type Mutation {
-    saveOrderDetails(orderDetailsInput:OrderDetailsInput,productId:Int!):OrderDetails
+    saveOrderDetails(orderDetailsInput:OrderDetailsInput,productList:[OrderProducts]):[OrderDetails]
     deleteOrderDetailById(orderDetailId:Int!):Boolean
     updateOrderDetails(orderDetail:OrderDetailsUpdateInput):OrderDetails
     
