@@ -90,6 +90,7 @@ public class AppUtility {
 		return orderDetail;
 	}
 	
+	/* This method will return OrderDetails List with products. */
 	public static List<OrderDetails> getOrderDetailsList(OrderDetails ordereDetail, List<OrderProducts> orderProductList){
 		List<OrderDetails> orderDetailsList = new ArrayList<>();
 		try {
