@@ -21,6 +21,7 @@ import com.st.ims.model.OrderProducts;
 public class AppUtility {
 
 	private static final Logger logger = Logger.getLogger(AppUtility.class);
+	private static final int PERCENTAGE_DENOMINATOR = 100;
 
 	private AppUtility() {
 
@@ -58,7 +59,7 @@ public class AppUtility {
 	 * commission amount.
 	 */
 	private static double getCommissionAmount(double invoiceAmount, double commissionPercentage) {
-		return invoiceAmount * (commissionPercentage / 100);
+		return invoiceAmount * (commissionPercentage / PERCENTAGE_DENOMINATOR);
 	}
 
 	public static InvoiceDetails setDefaultValues(InvoiceDetails invoiceDetail) {
