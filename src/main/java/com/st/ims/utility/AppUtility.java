@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -76,29 +77,27 @@ public class AppUtility {
 
 	}
 
-	public static OrderDetails setDefaultValues(OrderDetails orderDetail) {
+	public static Order setDefaultValues(Order order) {
 		try {
-			Order order = orderDetail.getOrder();
 			order.setDueDate(getDueDate(order.getCreateDate()));
 			order.setCommissionAmount(getCommissionAmount(order.getOrderAmount(), order.getCommissionPercentage()));
 			order.setOrderNumber(getInvoiceNumber());
-			orderDetail.setOrder(order);
-			return orderDetail;
+			return order;
 		} catch (NoSuchAlgorithmException e) {
 			logger.error("Exception while configuring dueDate,orderNumber and commissionAmount.", e);
 		}
-		return orderDetail;
+		return null;
 	}
 	
 	/* This method will return OrderDetails List with products. */
-	public static List<OrderDetails> getOrderDetailsList(OrderDetails ordereDetail, List<OrderProducts> orderProductList){
-		List<OrderDetails> orderDetailsList = new ArrayList<>();
+	public static List<OrderDetails> getOrderDetailsList(Order order, List<OrderProducts> orderProductList){
 		try {
-			OrderDetails filledOrderDetails = setDefaultValues(ordereDetail);
+			List<OrderDetails> orderDetailsList = new ArrayList<>();
+			 Order filledOrder = setDefaultValues(order);
 			if(!orderProductList.isEmpty()) {
 				for(OrderProducts productList:orderProductList){
 					OrderDetails newOrderDetail = new OrderDetails();
-					newOrderDetail.setOrder(filledOrderDetails.getOrder());
+					newOrderDetail.setOrder(filledOrder);
 					newOrderDetail.setProduct(productList.getProduct());
 					newOrderDetail.setProductCount(productList.getProductQuantity());
 					orderDetailsList.add(newOrderDetail);
@@ -110,6 +109,27 @@ public class AppUtility {
 		} catch (Exception e) {
 			logger.error("Exception while getting OrderDetailsList.",e);
 		}
-		return orderDetailsList;
+		return Collections.emptyList();
 	}
+	
+	/* This method will create new OrderDetails list for update operation. */
+	public static List<OrderDetails> getUpdatedOrderList(Order order,List<OrderProducts> orderProductList){
+		try {
+			List<OrderDetails> orderDetailsList = new ArrayList<>();
+			for(OrderProducts orderProduct:orderProductList) {
+				OrderDetails orderDetail = new OrderDetails();
+				orderDetail.setOrder(order);
+				orderDetail.setProduct(orderProduct.getProduct());
+				orderDetail.setProductCount(orderProduct.getProductQuantity());
+				orderDetailsList.add(orderDetail);
+				 
+			 }
+			 return orderDetailsList;
+		}catch(Exception e) {
+			logger.error("Exception while setting invoice detials list for updation.",e);
+		}
+		return Collections.emptyList();
+	}
+	
+
 }

@@ -67,12 +67,12 @@ input OrderDetailsUpdateInput{
 
 extend type Query{
 findAllOrderDetails:[OrderDetails]
-findOrderDetailById(orderDetailId:Int!):OrderDetails
+findOrderDetailById(orderId:Int!):[OrderDetails]
 }
 extend type Mutation {
-    saveOrderDetails(orderDetailsInput:OrderDetailsInput,productList:[OrderProducts]):[OrderDetails]
-    deleteOrderDetailById(orderDetailId:Int!):Boolean
-    updateOrderDetails(orderDetail:OrderDetailsUpdateInput):OrderDetails
+    saveOrderDetails(orderInput:OrderInput,productList:[OrderProducts]):Order
+    deleteOrderById(orderId:Int!):Boolean
+    updateOrder(orderDetail:OrderUpdateInput,productList:[OrderProducts]):Order
     
  }
 

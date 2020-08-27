@@ -53,7 +53,7 @@ private static final long serialVersionUID = 1L;
 	@Column(name = "\"commissionAmount\"" , nullable = false)
 	private double commissionAmount;
 	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,orphanRemoval = true)
 	private List<OrderDetails> orderDetails;
 
 }

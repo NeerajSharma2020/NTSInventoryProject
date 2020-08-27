@@ -10,9 +10,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.st.ims.model.Order;
 import com.st.ims.model.OrderDetails;
 import com.st.ims.model.OrderProducts;
-import com.st.ims.repo.OrderDetailsRepository;
+import com.st.ims.repo.OrderRepository;
 import com.st.ims.utility.AppUtility;
 
 import graphql.kickstart.tools.GraphQLMutationResolver;
@@ -24,7 +25,7 @@ public class OrderDetailsMutationResolver implements GraphQLMutationResolver {
 	private final Logger logger = Logger.getLogger(this.getClass());
 
 	@Autowired
-	private OrderDetailsRepository orderDetailsRepo;
+	private OrderRepository orderRepo;
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -34,27 +35,24 @@ public class OrderDetailsMutationResolver implements GraphQLMutationResolver {
 	 * orderDetails object into database and make relationship with product with
 	 * passed productId.
 	 */
-	public List<OrderDetails> saveOrderDetails(OrderDetails orderDetail, List<OrderProducts> orderProductList) {
-		List<OrderDetails> orderDetailsList = null;
-		try {
-			orderDetailsList = AppUtility.getOrderDetailsList(orderDetail, orderProductList);
-			if (orderDetail.getOrder() != null) {
-				entityManager.persist(orderDetail.getOrder());
-			}
-			return orderDetailsRepo.saveAll(orderDetailsList);
+	public Order saveOrderDetails(Order order, List<OrderProducts> orderProductList) {
+	   try {
+		   List<OrderDetails> orderDetailsList = AppUtility.getOrderDetailsList(order, orderProductList);
+		   order.setOrderDetails(orderDetailsList);
+		   return orderRepo.save(order);
 		} catch (Exception e) {
 			logger.error("Exception while saving Order Details.", e);
 		}
-		return orderDetailsList;
+		return null;
 	}
 
 	/*
-	 * This method will take orderDetailsId as integer and will delete OrderDetails
+	 * This method will take orderId as integer and will delete OrderDetails
 	 * with it.
 	 */
-	public boolean deleteOrderDetailById(int orderDetailsId) {
+	public boolean deleteOrderById(int orderId) {
 		try {
-			orderDetailsRepo.deleteById(orderDetailsId);
+			orderRepo.deleteById(orderId);
 			return true;
 		} catch (Exception e) {
 			logger.error("Exception while deleting Order Details.", e);
@@ -64,16 +62,13 @@ public class OrderDetailsMutationResolver implements GraphQLMutationResolver {
 	}
 
 	/* This method will take OrderDetails Object and return new updated Object. */
-	public OrderDetails updateOrderDetails(OrderDetails orderDetail) {
+	public Order updateOrder(Order order,List<OrderProducts> orderProductList) {
 		try {
-			if (orderDetailsRepo.existsById(orderDetail.getOrderDetailId())) {
-				entityManager.merge(orderDetail.getOrder());
-				return entityManager.merge(orderDetail);
-			} else {
-				logger.error("OrderDetails Id you are looking for doesn't exist.");
-			}
+			List<OrderDetails> orderDetailsList = AppUtility.getUpdatedOrderList(order, orderProductList);
+			 order.setOrderDetails(orderDetailsList);
+			 return entityManager.merge(order);
 		} catch (Exception e) {
-			logger.error("Exception while updaing Invoice Details.", e);
+			logger.error("Exception while updaing Order Details.",e);
 		}
 		return null;
 	}
