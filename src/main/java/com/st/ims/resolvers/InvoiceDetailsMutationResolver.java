@@ -1,5 +1,7 @@
 package com.st.ims.resolvers;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -8,9 +10,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.st.ims.model.Invoice;
 import com.st.ims.model.InvoiceDetails;
-import com.st.ims.repo.InvoiceDetailsRepository;
-import com.st.ims.repo.ProductRepository;
+import com.st.ims.model.InvoiceProducts;
+import com.st.ims.repo.InvoiceRepository;
 import com.st.ims.utility.AppUtility;
 
 import graphql.kickstart.tools.GraphQLMutationResolver;
@@ -21,54 +24,51 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 
 	private final Logger logger = Logger.getLogger(this.getClass());
 
-	@Autowired
-	private InvoiceDetailsRepository invoiceDetailsRepo;
-
-	@Autowired
-	private ProductRepository productRepo;
-
 	@PersistenceContext
 	private EntityManager entityManager;
+	
+	@Autowired
+	private InvoiceRepository invoiceRepo;
 
 	/*
 	 * This method will take invoice details and productId and will persist invoice
-	 * in database and will make relationship of product with invoicedetails.
+	 * in database and will make relationship of product with InvoiceDetails.
 	 */
-	public InvoiceDetails saveInvoiceDetails(InvoiceDetails invoiceDetail, int productId) {
+	public Invoice saveInvoice(Invoice invoice, List<InvoiceProducts> invoiceProductList) {
 		try {
-			InvoiceDetails filledInvoiceDetails = AppUtility.setDefaultValues(invoiceDetail);
-			filledInvoiceDetails.setProduct(productRepo.findById(productId).orElse(null));
-			return invoiceDetailsRepo.save(filledInvoiceDetails);
-		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
+			List<InvoiceDetails> invoiceDetailsList = AppUtility.getInvoiceDetailsList(invoice, invoiceProductList);
+            invoice.setInvoiceDetails(invoiceDetailsList);
+			    return invoiceRepo.save(invoice);
+	} catch (Exception e) {
+			logger.error("Exception while saving Invoide Details.",e);
 		}
-		return invoiceDetail;
+		return null;
 	}
 
-	/* This method will delete invoice details by Id */
-	public String deleteInvoiceDetailById(int ivoiceDetailsId) {
+	/* This method will delete invoice and invoiceDetails associated with it by Id */
+	public boolean deleteInvoiceById(int invoiceId) {
 		try {
-			invoiceDetailsRepo.deleteById(ivoiceDetailsId);
-			return "Invoice Deleted successfully.";
+			invoiceRepo.deleteById(invoiceId);
+			return true;
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
-			return "No InvoiceDetail entity with id " + ivoiceDetailsId + " exists!";
+			logger.error("Exception while deleting Invoice Details.",e);
+			return false;
 		}
 
 	}
 
 	/* This method will take InvoiceDetails Object and return new updated Object. */
-	public InvoiceDetails updateInvoiceDetails(InvoiceDetails invoiceDetail) {
+	public Invoice updateInvoice(Invoice invoice,List<InvoiceProducts> invoiceProductList) {
 		try {
-			entityManager.merge(invoiceDetail.getInvoice());
-			return entityManager.merge(invoiceDetail);
+			List<InvoiceDetails> invoiceDetailsList = AppUtility.getUpdatedInvoiceList(invoice, invoiceProductList);
+			 invoice.setInvoiceDetails(invoiceDetailsList);
+			 return entityManager.merge(invoice);
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("Exception while updaing Invoice Details.",e);
 		}
-		return invoiceDetail;
+		return null;
+		 
+		 
 	}
 
 }

@@ -29,13 +29,12 @@ public class ProductMutationResolver implements GraphQLMutationResolver{
 	 * database.
 	 */
 	public Product saveProduct(Product productInput){
-		log.info("saving product....");
 		try {
 			if(productInput != null) {
 				return productRepo.save(productInput);
 			}
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Exception while saving Product.",e);
 		}
 		
 		return null;
@@ -45,15 +44,13 @@ public class ProductMutationResolver implements GraphQLMutationResolver{
 	 * This method will take productID as integer and will delete that product from
 	 * database.
 	 */
-	public String deleteProductById(int productId) {
+	public boolean deleteProductById(int productId) {
 		try {
-			log.info("Deleting product based on id.");
 			productRepo.deleteById(productId);
-			return "Product deleted successfully.";
+			return true;
 		} catch (Exception e) {
-			log.error(e);
-			e.printStackTrace();
-			return "No Product entity with id "+productId+" exists!";
+			log.error("Exception while deleting Product.",e);
+			return false;
 		}
 		
 		
@@ -74,10 +71,10 @@ public class ProductMutationResolver implements GraphQLMutationResolver{
             entityManager.merge(productData.getFormatType());
             entityManager.merge(productData.getPriceBy());
             entityManager.merge(productData.getStatus());
+            log.info("Product to be updated.."+productData);
 			return entityManager.merge(productData);
 		} catch (Exception e) {
-			log.error(e);
-			e.printStackTrace();
+			log.error("Exception while updating Product.",e);
 		}
 		return productData;
 	

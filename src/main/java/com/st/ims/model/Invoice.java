@@ -55,31 +55,7 @@ public class Invoice implements Serializable{
 	@Column(name = "\"commissionAmount\"" , nullable = false)
 	private double commissionAmount;
 	@OneToMany(mappedBy = "invoice", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,orphanRemoval=true)
 	private List<InvoiceDetails> invoiceDetails;
 	
-	
-	public Invoice(LocalDateTime createDate, LocalDateTime dueDate, String invoiceNumber, String status, String factSONumber,
-			String proNumber, String notes, double invoiceAmount, double commissionPercentage, double commissionAmount,
-			List<InvoiceDetails> invoiceDetails) {
-		super();
-		this.createDate = createDate;
-		this.dueDate = dueDate;
-		this.invoiceNumber = invoiceNumber;
-		this.status = status;
-		this.factSONumber = factSONumber;
-		this.proNumber = proNumber;
-		this.notes = notes;
-		this.invoiceAmount = invoiceAmount;
-		this.commissionPercentage = commissionPercentage;
-		this.commissionAmount = commissionAmount;
-		this.invoiceDetails = invoiceDetails;
-	}
-	
-	
-	
-	
-	
-
-
 }

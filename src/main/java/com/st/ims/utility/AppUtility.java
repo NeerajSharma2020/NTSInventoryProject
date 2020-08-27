@@ -3,15 +3,21 @@ package com.st.ims.utility;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.st.ims.model.Invoice;
 import com.st.ims.model.InvoiceDetails;
+import com.st.ims.model.InvoiceProducts;
 
 @Service
 public class AppUtility {
+	
+	private static final Logger logger = Logger.getLogger(AppUtility.class);
 	
 	private AppUtility() {
 		
@@ -55,20 +61,60 @@ public class AppUtility {
 		return invoiceAmount*(commissionPercentage/100);
 	}
 	
-	
-	public static InvoiceDetails setDefaultValues(InvoiceDetails invoiceDetail) {
+	/* This method will set default values for invoice object. */
+	public static Invoice setDefaultValues(Invoice invoice) {
 		try {
-			Invoice invoice = invoiceDetail.getInvoice();
 			invoice.setDueDate(getDueDate(invoice.getCreateDate()));
 			invoice.setCommissionAmount(getCommissionAmount(invoice.getInvoiceAmount(),invoice.getCommissionPercentage()));
 			invoice.setInvoiceNumber(getInvoiceNumber());
-			invoiceDetail.setInvoice(invoice);
-			return invoiceDetail;
+			return invoice;
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			logger.error("Exception while configuring dueDate,invoiceNumber and commissionAmount.",e);
 		}
-		return invoiceDetail;
-		
-		
+		return invoice;
 	}
+
+	/* This method will create a new InvoiceDetails List, so that we can persist invoice object with this list */
+	public static List<InvoiceDetails> getInvoiceDetailsList(Invoice invoice, List<InvoiceProducts> invoiceProductList){
+		List<InvoiceDetails> invoiceDetailsList = new ArrayList<>();
+		try {
+			Invoice filledInvoice = setDefaultValues(invoice);
+			if(!invoiceProductList.isEmpty()) {
+				for(InvoiceProducts invoiceProduct:invoiceProductList){
+					InvoiceDetails newInvoiceDetail = new InvoiceDetails();
+					newInvoiceDetail.setInvoice(filledInvoice);
+					newInvoiceDetail.setProduct(invoiceProduct.getProduct());
+					newInvoiceDetail.setProductCount(invoiceProduct.getProductQuantity());
+					invoiceDetailsList.add(newInvoiceDetail);
+				}
+			}else {
+				logger.error("Invoice doesn,t have any product associated with it.");
+			}
+			    return invoiceDetailsList;
+		} catch (Exception e) {
+			logger.error("Exception while getting InvoiceDetailsList.",e);
+		}
+		return invoiceDetailsList;
+	}
+	
+	/* This method will create new InvoiceDetails list for update operation. */
+	public static List<InvoiceDetails> getUpdatedInvoiceList(Invoice invoice,List<InvoiceProducts> invoiceProductList){
+	
+		List<InvoiceDetails> invoiceDetailsList = new ArrayList<>();
+		try {
+			for(InvoiceProducts invoiceProduct:invoiceProductList) {
+				 InvoiceDetails invoiceDetail = new InvoiceDetails();
+				 invoiceDetail.setInvoice(invoice);
+				 invoiceDetail.setProduct(invoiceProduct.getProduct());
+				 invoiceDetail.setProductCount(invoiceProduct.getProductQuantity());
+				 invoiceDetailsList.add(invoiceDetail);
+				 
+			 }
+			 return invoiceDetailsList;
+		}catch(Exception e) {
+			logger.error("Exception while setting invoice detials list for updation.",e);
+		}
+		return invoiceDetailsList;
+	}
+	
 }

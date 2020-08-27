@@ -1,5 +1,7 @@
 package com.st.ims.resolvers;
 
+import javax.transaction.Transactional;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,7 @@ import com.st.ims.repo.ProductRepository;
 import graphql.kickstart.tools.GraphQLResolver;
 
 @Component
+@Transactional
 public class InvoiceDetailsResolver implements GraphQLResolver<InvoiceDetails> {
 
 	private final Logger logger = Logger.getLogger(this.getClass());
@@ -25,11 +28,9 @@ public class InvoiceDetailsResolver implements GraphQLResolver<InvoiceDetails> {
 
 	public Invoice getInvoice(InvoiceDetails invoiceDetails) {
 		try {
-			
 			return invoiceRepo.save(invoiceDetails.getInvoice());
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("Exception while saving Invoice for Invoice Details.",e);
 		}
 		return null;
 
@@ -39,8 +40,7 @@ public class InvoiceDetailsResolver implements GraphQLResolver<InvoiceDetails> {
 		try {
 			return productRepo.save(invoiceDetails.getProduct());
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("Exception while saving Product for Invoice Details.",e);
 		}
 		return null;
 

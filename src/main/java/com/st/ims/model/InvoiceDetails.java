@@ -33,20 +33,19 @@ public class InvoiceDetails implements Serializable{
 	private int invoiceDetailId;
 	
 	// CascadeType.PERSIST will restrict to delete the invoice record while deleting InvoiceDetails.
-	@ManyToOne(fetch = FetchType.LAZY,cascade =CascadeType.PERSIST)
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "\"invoiceID\"")
 	private Invoice invoice;
 	
 	// CascadeType.PERSIST will restrict to delete the product record while deleting InvoiceDetails.
-	  @OneToOne(cascade = CascadeType.PERSIST)
+	  @OneToOne(cascade = CascadeType.MERGE)
 	  @JoinColumn(name="\"productID\"")
 	 private Product product;
+	 
+	 @Column(name = "\"productCount\"",columnDefinition = "integer default 1")
+	 private int productCount = 1; 
 
-	public InvoiceDetails(Invoice invoice, Product product) {
-		super();
-		this.invoice = invoice;
-		this.product = product;
-	}
+	
 	
 	
 
