@@ -67,7 +67,7 @@ totalAmount:Float
 
 extend type Query {
    findAllInvoiceDetails:[InvoiceDetails]
-   findInvoiceById(InvoiceId:Int!):Invoice
+   findInvoiceDetailsById(InvoiceId:Int!):[InvoiceDetails]
 }
 
 extend type Mutation {
