@@ -8,8 +8,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class InvoiceProducts {
 	
-	private Product Product;
+	private Product product;
 	private int productQuantity;
-	private double totalAmount;
 
 }
