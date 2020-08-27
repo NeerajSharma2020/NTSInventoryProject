@@ -1,6 +1,5 @@
 package com.st.ims.resolvers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -36,16 +35,14 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 	 * in database and will make relationship of product with InvoiceDetails.
 	 */
 	public Invoice saveInvoice(Invoice invoice, List<InvoiceProducts> invoiceProductList) {
-		
-		List<InvoiceDetails> invoiceDetailsList = null;
 		try {
-			invoiceDetailsList=AppUtility.getInvoiceDetailsList(invoice, invoiceProductList);
+			List<InvoiceDetails> invoiceDetailsList = AppUtility.getInvoiceDetailsList(invoice, invoiceProductList);
             invoice.setInvoiceDetails(invoiceDetailsList);
 			    return invoiceRepo.save(invoice);
 	} catch (Exception e) {
 			logger.error("Exception while saving Invoide Details.",e);
 		}
-		return invoice;
+		return null;
 	}
 
 	/* This method will delete invoice and invoiceDetails associated with it by Id */
@@ -62,15 +59,14 @@ public class InvoiceDetailsMutationResolver implements GraphQLMutationResolver {
 
 	/* This method will take InvoiceDetails Object and return new updated Object. */
 	public Invoice updateInvoice(Invoice invoice,List<InvoiceProducts> invoiceProductList) {
-		List<InvoiceDetails> invoiceDetailsList = new ArrayList<>();
 		try {
-			invoiceDetailsList = AppUtility.getUpdatedInvoiceList(invoice, invoiceProductList);
+			List<InvoiceDetails> invoiceDetailsList = AppUtility.getUpdatedInvoiceList(invoice, invoiceProductList);
 			 invoice.setInvoiceDetails(invoiceDetailsList);
 			 return entityManager.merge(invoice);
 		} catch (Exception e) {
 			logger.error("Exception while updaing Invoice Details.",e);
 		}
-		return invoice;
+		return null;
 		 
 		 
 	}

@@ -1,6 +1,6 @@
 package com.st.ims.resolvers;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -30,32 +30,28 @@ public class InvoiceDetailsQueryResolver implements GraphQLQueryResolver{
 	
 	/* This method will return invoice and product data with invoiceDetailsId. */
      public List<InvoiceDetails> findAllInvoiceDetails(){
-         List<InvoiceDetails> invoiceDetailsList =  new ArrayList<>();
 		try {
-			invoiceDetailsList= invoiceDetailsRepo.findAll();
-			return invoiceDetailsList;
-		} catch (Exception e) {
+			return invoiceDetailsRepo.findAll();
+			} catch (Exception e) {
 			logger.error("Exception while fetching all Invoice Details.",e);
 		}
-		return invoiceDetailsList;
+		return Collections.emptyList();
 	}
      
 	/* This method will take invoiceId and will return list of all invoiceDetails object associated with this invoiceId.*/
      public List<InvoiceDetails> findInvoiceDetailsById(int invoiceId) {
-    	 List<InvoiceDetails> invoiceDetailsList =  new ArrayList<>();
     	 try {
     	     Invoice invoice = invoiceRepo.findById(invoiceId).orElse(null);
     	     if(invoice != null) {
-    	    	 invoiceDetailsList = invoice.getInvoiceDetails();
-    	    	 return invoiceDetailsList;
-    	     }else {
+    	    	 return invoice.getInvoiceDetails();
+    	   }else {
     	    	 logger.error("Error while while getting list for invoiceId, may be invoice with id "+invoiceId+" doesn,t exists.");
-    	    	 return invoiceDetailsList;
+    	    	 return Collections.emptyList();
     	     }
 		}catch (Exception e) {
 			logger.error("Exception while fetching Invoice Details by id, may be id you are looking for not available.",e);
 		}
-		return invoiceDetailsList;
+    	 return Collections.emptyList();
      }
 
 }
