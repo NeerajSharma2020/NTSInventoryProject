@@ -55,7 +55,7 @@ public class Invoice implements Serializable{
 	@Column(name = "\"commissionAmount\"" , nullable = false)
 	private double commissionAmount;
 	@OneToMany(mappedBy = "invoice", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,orphanRemoval=true)
 	private List<InvoiceDetails> invoiceDetails;
 	
 }

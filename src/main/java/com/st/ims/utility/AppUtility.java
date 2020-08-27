@@ -61,31 +61,30 @@ public class AppUtility {
 		return invoiceAmount*(commissionPercentage/100);
 	}
 	
-	
-	public static InvoiceDetails setDefaultValues(InvoiceDetails invoiceDetail) {
+	/* This method will set default values for invoice object. */
+	public static Invoice setDefaultValues(Invoice invoice) {
 		try {
-			Invoice invoice = invoiceDetail.getInvoice();
 			invoice.setDueDate(getDueDate(invoice.getCreateDate()));
 			invoice.setCommissionAmount(getCommissionAmount(invoice.getInvoiceAmount(),invoice.getCommissionPercentage()));
 			invoice.setInvoiceNumber(getInvoiceNumber());
-			invoiceDetail.setInvoice(invoice);
-			return invoiceDetail;
+			return invoice;
 		} catch (NoSuchAlgorithmException e) {
 			logger.error("Exception while configuring dueDate,invoiceNumber and commissionAmount.",e);
 		}
-		return invoiceDetail;
+		return invoice;
 	}
-	
-	public static List<InvoiceDetails> getInvoiceDetailsList(InvoiceDetails invoiceDetail, List<InvoiceProducts> invoiceProductList){
+
+	/* This method will create a new InvoiceDetails List, so that we can persist invoice object with this list */
+	public static List<InvoiceDetails> getInvoiceDetailsList(Invoice invoice, List<InvoiceProducts> invoiceProductList){
 		List<InvoiceDetails> invoiceDetailsList = new ArrayList<>();
 		try {
-			InvoiceDetails filledInvoiceDetails = setDefaultValues(invoiceDetail);
+			Invoice filledInvoice = setDefaultValues(invoice);
 			if(!invoiceProductList.isEmpty()) {
-				for(InvoiceProducts productListIterator:invoiceProductList){
+				for(InvoiceProducts invoiceProduct:invoiceProductList){
 					InvoiceDetails newInvoiceDetail = new InvoiceDetails();
-					newInvoiceDetail.setInvoice(filledInvoiceDetails.getInvoice());
-					newInvoiceDetail.setProduct(productListIterator.getProduct());
-					newInvoiceDetail.setProductCount(productListIterator.getProductQuantity());
+					newInvoiceDetail.setInvoice(filledInvoice);
+					newInvoiceDetail.setProduct(invoiceProduct.getProduct());
+					newInvoiceDetail.setProductCount(invoiceProduct.getProductQuantity());
 					invoiceDetailsList.add(newInvoiceDetail);
 				}
 			}else {
@@ -94,6 +93,26 @@ public class AppUtility {
 			    return invoiceDetailsList;
 		} catch (Exception e) {
 			logger.error("Exception while getting InvoiceDetailsList.",e);
+		}
+		return invoiceDetailsList;
+	}
+	
+	/* This method will create new InvoiceDetails list for update operation. */
+	public static List<InvoiceDetails> getUpdatedInvoiceList(Invoice invoice,List<InvoiceProducts> invoiceProductList){
+	
+		List<InvoiceDetails> invoiceDetailsList = new ArrayList<>();
+		try {
+			for(InvoiceProducts invoiceProduct:invoiceProductList) {
+				 InvoiceDetails invoiceDetail = new InvoiceDetails();
+				 invoiceDetail.setInvoice(invoice);
+				 invoiceDetail.setProduct(invoiceProduct.getProduct());
+				 invoiceDetail.setProductCount(invoiceProduct.getProductQuantity());
+				 invoiceDetailsList.add(invoiceDetail);
+				 
+			 }
+			 return invoiceDetailsList;
+		}catch(Exception e) {
+			logger.error("Exception while setting invoice detials list for updation.",e);
 		}
 		return invoiceDetailsList;
 	}
