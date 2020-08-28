@@ -45,7 +45,7 @@ public class InvoiceDetailsQueryResolver implements GraphQLQueryResolver{
     	     if(invoice != null) {
     	    	 return invoice.getInvoiceDetails();
     	   }else {
-    	    	 logger.error("Error while while getting list for invoiceId, may be invoice with id "+invoiceId+" doesn,t exists.");
+    	    	 logger.info("Error while while getting list for invoiceId, may be invoice with id "+invoiceId+" doesn,t exists.");
     	    	 return Collections.emptyList();
     	     }
 		}catch (Exception e) {

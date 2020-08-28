@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -76,10 +77,11 @@ public class AppUtility {
 
 	/* This method will create a new InvoiceDetails List, so that we can persist invoice object with this list */
 	public static List<InvoiceDetails> getInvoiceDetailsList(Invoice invoice, List<InvoiceProducts> invoiceProductList){
-		List<InvoiceDetails> invoiceDetailsList = new ArrayList<>();
+		List<InvoiceDetails> invoiceDetailsList = null;
 		try {
 			Invoice filledInvoice = setDefaultValues(invoice);
 			if(!invoiceProductList.isEmpty()) {
+				 invoiceDetailsList = new ArrayList<>();
 				for(InvoiceProducts invoiceProduct:invoiceProductList){
 					InvoiceDetails newInvoiceDetail = new InvoiceDetails();
 					newInvoiceDetail.setInvoice(filledInvoice);
@@ -87,34 +89,40 @@ public class AppUtility {
 					newInvoiceDetail.setProductCount(invoiceProduct.getProductQuantity());
 					invoiceDetailsList.add(newInvoiceDetail);
 				}
+				return invoiceDetailsList;
 			}else {
-				logger.error("Invoice doesn,t have any product associated with it.");
+				logger.info("Invoice doesn,t have any product associated with it.");
 			}
-			    return invoiceDetailsList;
+			    return Collections.emptyList();
 		} catch (Exception e) {
 			logger.error("Exception while getting InvoiceDetailsList.",e);
 		}
-		return invoiceDetailsList;
+		return Collections.emptyList();
 	}
 	
 	/* This method will create new InvoiceDetails list for update operation. */
 	public static List<InvoiceDetails> getUpdatedInvoiceList(Invoice invoice,List<InvoiceProducts> invoiceProductList){
 	
-		List<InvoiceDetails> invoiceDetailsList = new ArrayList<>();
+		List<InvoiceDetails> invoiceDetailsList = null;
 		try {
+			if(!invoiceProductList.isEmpty()) {
+				invoiceDetailsList = new ArrayList<>();
 			for(InvoiceProducts invoiceProduct:invoiceProductList) {
 				 InvoiceDetails invoiceDetail = new InvoiceDetails();
 				 invoiceDetail.setInvoice(invoice);
 				 invoiceDetail.setProduct(invoiceProduct.getProduct());
 				 invoiceDetail.setProductCount(invoiceProduct.getProductQuantity());
 				 invoiceDetailsList.add(invoiceDetail);
-				 
-			 }
-			 return invoiceDetailsList;
+				 }
+			return invoiceDetailsList;
+			}else {
+				logger.info("Invoice doesn,t have any product associated with it.");
+			}
+			 return Collections.emptyList();
 		}catch(Exception e) {
 			logger.error("Exception while setting invoice detials list for updation.",e);
 		}
-		return invoiceDetailsList;
+		return Collections.emptyList();
 	}
 	
 }
