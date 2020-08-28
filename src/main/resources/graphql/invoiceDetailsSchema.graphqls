@@ -1,0 +1,79 @@
+scalar LocalDateTime
+
+type Invoice{
+    invoiceId:Int!
+    createDate: LocalDateTime
+    dueDate:LocalDateTime
+    invoiceNumber: String
+    status: String
+    factSONumber: String
+    proNumber: String
+    notes:String
+    invoiceAmount:Float
+    commissionPercentage:Float
+    commissionAmount:Float
+    invoiceDetails:[InvoiceDetails]
+}
+
+type InvoiceDetails{
+  invoiceDetailId:Int!
+  invoice:Invoice
+  product:Product
+  productCount:Int
+}
+
+input InvoiceInput {
+    invoiceId:Int
+    createDate: LocalDateTime!
+    status: String
+    factSONumber: String
+    proNumber: String
+    notes:String
+    invoiceAmount:Float!
+    commissionPercentage:Float!
+}
+
+input InvoiceDetailsInput{
+  invoice:InvoiceInput
+  product:ProductInput
+  productCount:Int
+}
+
+input InvoiceUpdateInput{
+invoiceId:Int!
+createDate: LocalDateTime
+dueDate:LocalDateTime
+invoiceNumber: String
+status: String
+factSONumber: String
+proNumber: String
+notes:String
+invoiceAmount:Float
+commissionPercentage:Float
+commissionAmount:Float
+}
+
+input InvoiceDetailsUpdateInput{
+  invoice:InvoiceUpdateInput
+  product:ProductInput
+  productCount:Int
+}
+
+input InvoiceProducts{
+product:ProductInput
+productQuantity:Int
+totalAmount:Float
+}
+
+extend type Query {
+   findAllInvoiceDetails:[InvoiceDetails]
+   findInvoiceDetailsById(InvoiceId:Int!):[InvoiceDetails]
+}
+
+extend type Mutation {
+    saveInvoice(invoiceInput:InvoiceInput,productList:[InvoiceProducts]):Invoice
+    deleteInvoiceById(invoiceId:Int!):String
+    updateInvoice(invoice:InvoiceUpdateInput,productList:[InvoiceProducts]):Invoice
+ }
+
+
