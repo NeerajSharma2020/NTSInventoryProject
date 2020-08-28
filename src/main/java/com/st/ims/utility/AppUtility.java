@@ -89,14 +89,15 @@ public class AppUtility {
 		}
 		return null;
 	}
-	
+
 	/* This method will return OrderDetails List with products. */
-	public static List<OrderDetails> getOrderDetailsList(Order order, List<OrderProducts> orderProductList){
+	public static List<OrderDetails> getOrderDetailsList(Order order, List<OrderProducts> orderProductList) {
 		try {
-			List<OrderDetails> orderDetailsList = new ArrayList<>();
-			 Order filledOrder = setDefaultValues(order);
-			if(!orderProductList.isEmpty()) {
-				for(OrderProducts productList:orderProductList){
+			List<OrderDetails> orderDetailsList = null;
+			Order filledOrder = setDefaultValues(order);
+			if (!orderProductList.isEmpty()) {
+				orderDetailsList = new ArrayList<>();
+				for (OrderProducts productList : orderProductList) {
 					OrderDetails newOrderDetail = new OrderDetails();
 					newOrderDetail.setOrder(filledOrder);
 					newOrderDetail.setProduct(productList.getProduct());
@@ -104,33 +105,38 @@ public class AppUtility {
 					orderDetailsList.add(newOrderDetail);
 				}
 				return orderDetailsList;
-			}else {
-				logger.error("Order doesn,t have any product associated with it.");
+			} else {
+				logger.info("Order doesn,t have any product associated with it.");
 			}
 		} catch (Exception e) {
-			logger.error("Exception while getting OrderDetailsList.",e);
+			logger.error("Exception while getting OrderDetailsList.", e);
 		}
 		return Collections.emptyList();
 	}
-	
+
 	/* This method will create new OrderDetails list for update operation. */
-	public static List<OrderDetails> getUpdatedOrderList(Order order,List<OrderProducts> orderProductList){
+	public static List<OrderDetails> getUpdatedOrderList(Order order, List<OrderProducts> orderProductList) {
 		try {
-			List<OrderDetails> orderDetailsList = new ArrayList<>();
-			for(OrderProducts orderProduct:orderProductList) {
-				OrderDetails orderDetail = new OrderDetails();
-				orderDetail.setOrder(order);
-				orderDetail.setProduct(orderProduct.getProduct());
-				orderDetail.setProductCount(orderProduct.getProductQuantity());
-				orderDetailsList.add(orderDetail);
-				 
-			 }
-			 return orderDetailsList;
-		}catch(Exception e) {
-			logger.error("Exception while setting invoice detials list for updation.",e);
+			List<OrderDetails> orderDetailsList = null;
+			if (!orderProductList.isEmpty()) {
+				orderDetailsList = new ArrayList<>();
+				for (OrderProducts orderProduct : orderProductList) {
+					OrderDetails orderDetail = new OrderDetails();
+					orderDetail.setOrder(order);
+					orderDetail.setProduct(orderProduct.getProduct());
+					orderDetail.setProductCount(orderProduct.getProductQuantity());
+					orderDetailsList.add(orderDetail);
+				}
+				return orderDetailsList;
+			} else {
+				logger.info("Order doesn,t have any product associated with it.");
+			}
+
+			return Collections.emptyList();
+		} catch (Exception e) {
+			logger.error("Exception while setting invoice detials list for updation.", e);
 		}
 		return Collections.emptyList();
 	}
-	
 
 }

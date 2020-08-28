@@ -49,7 +49,7 @@ public class OrderDetailsQueryResolver implements GraphQLQueryResolver{
 	    	 return order.getOrderDetails();
 	   
 	     }else {
-	    	 logger.error("Error while while getting list for orderId, may be order with id "+orderId+" doesn,t exists.");
+	    	 logger.info("Error while while getting list for orderId, may be order with id "+orderId+" doesn,t exists.");
 	    	 return Collections.emptyList();
 	     }
 
