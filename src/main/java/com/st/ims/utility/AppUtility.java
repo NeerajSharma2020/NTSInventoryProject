@@ -10,9 +10,6 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-
-import com.st.ims.model.Invoice;
-import com.st.ims.model.InvoiceDetails;
 import com.st.ims.model.Order;
 import com.st.ims.model.OrderDetails;
 import com.st.ims.model.OrderProducts;
@@ -62,22 +59,10 @@ public class AppUtility {
 		return invoiceAmount * (commissionPercentage / PERCENTAGE_DENOMINATOR);
 	}
 
-	public static InvoiceDetails setDefaultValues(InvoiceDetails invoiceDetail) {
-		try {
-			Invoice invoice = invoiceDetail.getInvoice();
-			invoice.setDueDate(getDueDate(invoice.getCreateDate()));
-			invoice.setCommissionAmount(
-					getCommissionAmount(invoice.getInvoiceAmount(), invoice.getCommissionPercentage()));
-			invoice.setInvoiceNumber(getInvoiceNumber());
-			invoiceDetail.setInvoice(invoice);
-			return invoiceDetail;
-		} catch (NoSuchAlgorithmException e) {
-			logger.error("Exception while configuring dueDate,invoiceNumber and commissionAmount.", e);
-		}
-		return invoiceDetail;
-
-	}
-
+	/*
+	 * This method will set default values for order such as orderAmount,
+	 * orderNumber and dueDate.
+	 */
 	public static Order setDefaultValues(Order order) {
 		try {
 			order.setDueDate(getDueDate(order.getCreateDate()));
