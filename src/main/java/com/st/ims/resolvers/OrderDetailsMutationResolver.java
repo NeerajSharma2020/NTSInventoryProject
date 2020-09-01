@@ -1,6 +1,5 @@
 package com.st.ims.resolvers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -61,9 +60,9 @@ public class OrderDetailsMutationResolver implements GraphQLMutationResolver{
 
 	/* This method will take OrderDetails Object and return new updated Object. */
 	public Order updateOrder(Order order,List<OrderProducts> orderProductList) {
-		List<OrderDetails> orderDetailsList = new ArrayList<>();
 		try {
-			orderDetailsList = AppUtility.getUpdatedOrderList(order, orderProductList);
+			List<OrderDetails> orderDetailsList = null;
+			 orderDetailsList = AppUtility.getUpdatedOrderList(order, orderProductList);
 			 order.setOrderDetails(orderDetailsList);
 			 return entityManager.merge(order);
 		} catch (Exception e) {
