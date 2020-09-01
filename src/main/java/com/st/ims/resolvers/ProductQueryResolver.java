@@ -1,6 +1,6 @@
 package com.st.ims.resolvers;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -23,7 +23,7 @@ public class ProductQueryResolver implements GraphQLQueryResolver {
 	/* This method will return the list of products. */
 
 	public List<Product> findAllProducts() {
-		List<Product> productsList = new ArrayList<>();
+		List<Product> productsList = null;
 		try {
 			productsList=productRepo.findAll();
 			log.info("Size of all products List.."+productsList.size());
@@ -31,7 +31,7 @@ public class ProductQueryResolver implements GraphQLQueryResolver {
 		} catch (Exception e) {
 			log.error("Exception while fetching all Products."+e);
 		}
-		return productsList;
+		return Collections.emptyList();
 		
 	   }
 	

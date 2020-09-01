@@ -76,7 +76,7 @@ public class ProductMutationResolver implements GraphQLMutationResolver{
 		} catch (Exception e) {
 			log.error("Exception while updating Product.",e);
 		}
-		return productData;
+		return null;
 	
 		
 		
